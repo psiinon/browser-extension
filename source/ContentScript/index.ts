@@ -245,7 +245,7 @@ function enableExtension(): void {
 
 function configureExtension(): void {
   const localzapurl = localStorage.getItem(LOCAL_ZAP_URL);
-  const localzapenable = localStorage.getItem(LOCAL_ZAP_ENABLE) || true;
+  const localzapenable = localStorage.getItem(LOCAL_ZAP_ENABLE) || false;
   if (localzapurl) {
     Browser.storage.sync.set({
       zapurl: localzapurl,

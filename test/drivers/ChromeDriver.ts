@@ -35,6 +35,7 @@ class ChromeDriver {
     const backgroundPage = await this.context.newPage();
     await backgroundPage.goto(`chrome-extension://${extensionId}/options.html`);
     await backgroundPage.fill('#zapurl', `http://localhost:${JSONPORT}/`);
+    await backgroundPage.check('#zapenable');
     await backgroundPage.click('#save');
     await backgroundPage.close();
   }

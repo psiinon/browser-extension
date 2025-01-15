@@ -48,7 +48,7 @@ function restoreOptions(): void {
     .get({
       zapurl: 'http://zap/',
       zapkey: 'not set',
-      zapenable: true,
+      zapenable: false,
       zaprecordingactive: false,
       zapclosewindowhandle: true,
     })

@@ -182,6 +182,7 @@ async function handleMessage(
       zapurl: request.data.zapurl,
       zapcallback: request.data.zapcallback,
       zapkey: request.data.zapkey,
+      zapenable: true,
     });
 
     return true;
