@@ -278,8 +278,13 @@ function injectScript(): Promise<boolean> {
 
 injectScript();
 
+/* eslint-disable  @typescript-eslint/no-explicit-any */
 Browser.runtime.onMessage.addListener(
-  (message: MessageEvent, _sender: Runtime.MessageSender) => {
+  (
+    message: any,
+    _sender: Runtime.MessageSender,
+    _sendResponse: (response?: any) => void
+  ) => {
     if (message.type === ZAP_START_RECORDING) {
       configureExtension();
       recorder.recordUserInteractions();
@@ -287,6 +292,9 @@ Browser.runtime.onMessage.addListener(
     } else if (message.type === ZAP_STOP_RECORDING) {
       recorder.stopRecordingUserInteractions();
     }
+
+    // Returning `true` keeps the message channel open for async responses
+    return true;
   }
 );
 

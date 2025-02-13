@@ -92,7 +92,7 @@ class ZestScript {
   getZestScript(): Promise<ZestScriptMessage> {
     return new Promise((resolve) => {
       Browser.storage.sync.get({zapscriptname: this.title}).then((items) => {
-        this.title = items.zapscriptname;
+        this.title = items.zapscriptname as string;
         resolve({script: this.toJSON(), title: this.title});
       });
     });

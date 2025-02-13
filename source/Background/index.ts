@@ -262,7 +262,7 @@ async function handleMessage(
 }
 
 async function onMessageHandler(
-  message: MessageEvent,
+  message: unknown,
   _sender: Runtime.MessageSender
 ): Promise<number | ZestScriptMessage> {
   let val: number | ZestScriptMessage = 2;
@@ -270,7 +270,11 @@ async function onMessageHandler(
     zapurl: 'http://zap/',
     zapkey: 'not set',
   });
-  const msg = await handleMessage(message, items.zapurl, items.zapkey);
+  const msg = await handleMessage(
+    message as MessageEvent,
+    items.zapurl as string,
+    items.zapkey as string
+  );
   if (!(typeof msg === 'boolean')) {
     val = msg;
   }
@@ -286,7 +290,11 @@ function cookieChangeHandler(
       zapkey: 'not set',
     })
     .then((items) => {
-      reportCookies(changeInfo.cookie, items.zapurl, items.zapkey);
+      reportCookies(
+        changeInfo.cookie,
+        items.zapurl as string,
+        items.zapkey as string
+      );
     });
 }
 

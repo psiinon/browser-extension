@@ -29,6 +29,7 @@ import {
   ZAP_START_RECORDING,
   ZAP_STOP_RECORDING,
 } from '../utils/constants';
+import {ZestScriptMessage} from '../types/zestScript/ZestScript';
 
 const STOP = i18n.t('stop');
 const START = i18n.t('start');
@@ -97,7 +98,7 @@ async function restoreState(): Promise<void> {
       } else {
         stoppedAnimation();
       }
-      scriptNameInput.value = items.zapscriptname;
+      scriptNameInput.value = items.zapscriptname as string;
       if (items.zapclosewindowhandle) {
         done?.classList.remove('invisible');
       } else {
@@ -189,7 +190,8 @@ async function handleSaveScript(): Promise<void> {
     await Browser.runtime.sendMessage({type: STOP_RECORDING});
   }
   Browser.runtime.sendMessage({type: SAVE_ZEST_SCRIPT}).then((items) => {
-    downloadZestScript(items.script, items.title);
+    const msg = items as ZestScriptMessage;
+    downloadZestScript(msg.script, msg.title);
   });
 }
 

@@ -54,14 +54,14 @@ function restoreOptions(): void {
     })
     .then((items) => {
       (document.getElementById(ZAP_URL) as HTMLInputElement).value =
-        items.zapurl;
+        items.zapurl as string;
       (document.getElementById(ZAP_KEY) as HTMLInputElement).value =
-        items.zapkey;
+        items.zapkey as string;
       (document.getElementById(ZAP_ENABLE) as HTMLInputElement).checked =
-        items.zapenable;
+        items.zapenable as boolean;
       (
         document.getElementById('window-close-input') as HTMLInputElement
-      ).checked = items.zapclosewindowhandle;
+      ).checked = items.zapclosewindowhandle as boolean;
     });
 }
 document.addEventListener('DOMContentLoaded', restoreOptions);
