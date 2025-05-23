@@ -74,7 +74,8 @@ function integrationTests(
     expect(JSON.stringify(Array.from(actualData))).toBe(expectedData);
   });
 
-  if (browserName !== BROWSERNAME.FIREFOX) {
+  // TODO
+  if (browserName !== BROWSERNAME.CHROME) {
     test('Should Disable Extension', async () => {
       server = getFakeZapServer(actualData, _JSONPORT);
       const context = await driver.getContext(_JSONPORT);

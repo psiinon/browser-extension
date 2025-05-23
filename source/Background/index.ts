@@ -32,6 +32,8 @@ import {
   SESSION_STORAGE,
   SET_SAVE_SCRIPT_ENABLE,
   STOP_RECORDING,
+  ZAP_START_RECORDING,
+  ZAP_STOP_RECORDING,
   ZEST_SCRIPT,
 } from '../utils/constants';
 
@@ -301,6 +303,32 @@ function cookieChangeHandler(
     });
 }
 
+function sendMessageToContentScript(message: string, data = ''): void {
+  Browser.tabs.query({active: true, currentWindow: true}).then((tabs) => {
+    const activeTab = tabs[0];
+    if (activeTab?.id) {
+      Browser.tabs.sendMessage(activeTab.id, {type: message, data});
+    }
+  });
+}
+
+function stopRecording(): void {
+  console.log('Recording stopped ...');
+  sendMessageToContentScript(ZAP_STOP_RECORDING);
+  Browser.runtime.sendMessage({type: STOP_RECORDING});
+  Browser.storage.sync.set({
+    zaprecordingactive: false,
+  });
+}
+
+function startRecording(): void {
+  sendMessageToContentScript(ZAP_START_RECORDING);
+  Browser.runtime.sendMessage({type: RESET_ZEST_SCRIPT});
+  Browser.storage.sync.set({
+    zaprecordingactive: true,
+  });
+}
+
 Browser.runtime.onMessage.addListener(onMessageHandler);
 
 if (IS_FULL_EXTENSION) {
@@ -317,6 +345,26 @@ if (IS_FULL_EXTENSION) {
       zapkey: 'not set',
     });
   });
+
+  if (Browser.commands) {
+    Browser.commands.onCommand.addListener((_command) => {
+      // do stuff here
+      console.log('SBSB actually got here (background):O');
+      /*
+      Browser.tabs.create({url: 'options.html'}).then((tab) => {
+        Browser.tabs.update(tab.id, {active: true});
+      });
+      */
+      Browser.storage.sync.get({zaprecordingactive: false}).then((items) => {
+        if (items.zaprecordingactive) {
+          stopRecording();
+          console.log('active');
+        } else {
+          startRecording();
+        }
+      });
+    });
+  }
 }
 
 export {reportCookies};

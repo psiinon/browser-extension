@@ -72,10 +72,19 @@ class ChromeDriver {
   }
 
   public async toggleRecording(): Promise<void> {
+    /*
     const page = await this.context.newPage();
     await page.goto(await this.getPopupURL());
     await page.click('#record-btn');
     await page.close();
+    */
+    Browser.tabs.query({active: true, currentWindow: true}).then((tabs) => {
+      const activeTab = tabs[0];
+      if (activeTab?.id) {
+        // Browser.tabs.sendMessage(activeTab.id, {type: message, data});
+        activeTab.page.keyboard.press('CTRL+Shift+KeyZ');
+      }
+    });
   }
 
   public async close(): Promise<void> {
